@@ -9,4 +9,4 @@ kubeadm init --config /root/kubernetes_sandbox_init/configs/kubeconfig-control-p
 export KUBECONFIG=/etc/kubernetes/admin.conf
  
 # Project Calico
-kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.30.3/manifests/calico.yaml
+kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.31.0/manifests/calico.yaml
