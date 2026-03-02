@@ -25,8 +25,8 @@ sudo sysctl --system
 
 sudo apt install -y curl gnupg2 software-properties-common apt-transport-https ca-certificates
 
-sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmour -o /etc/apt/trusted.gpg.d/docker.gpg
-sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --yes --dearmour -o /etc/apt/trusted.gpg.d/docker.gpg
+sudo add-apt-repository -y "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
 
 sudo apt update
 sudo apt install -y containerd.io
@@ -40,7 +40,7 @@ sudo systemctl enable containerd
 LATEST_K8S=$(curl -sSL https://dl.k8s.io/release/stable.txt)
 MINOR_VERSION=$(echo "$LATEST_K8S" | cut -d'.' -f1-2 | sed 's/v//')
 
-curl -fsSL "https://pkgs.k8s.io/core:/stable:/v${MINOR_VERSION}/deb/Release.key" | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+curl -fsSL "https://pkgs.k8s.io/core:/stable:/v${MINOR_VERSION}/deb/Release.key" | sudo gpg --yes --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
 echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v${MINOR_VERSION}/deb/ /" | sudo tee /etc/apt/sources.list.d/kubernetes.list
 
 sudo apt update
