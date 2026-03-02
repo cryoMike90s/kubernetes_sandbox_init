@@ -12,6 +12,9 @@ export KUBECONFIG=/etc/kubernetes/admin.conf
 CALICO_VERSION=$(curl -s "https://api.github.com/repos/projectcalico/calico/releases/latest" | grep -Po '"tag_name": *"\K[^"]*')
 kubectl apply -f "https://raw.githubusercontent.com/projectcalico/calico/${CALICO_VERSION}/manifests/calico.yaml"
 
+# Wait for the Tigera operator to register its CRDs before applying the Installation CR
+kubectl wait --for=condition=Established crd/installations.operator.tigera.io --timeout=120s
+
 # Calico custom-resources (operator Installation CR)
 KUBEADM_CONFIG="/root/kubernetes_sandbox_init/configs/kubeconfig-control-plane.yaml"
 curl -L -o /tmp/calico-custom-resources.yaml \
