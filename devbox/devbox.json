@@ -23,7 +23,7 @@
     "act@latest",
     "kubent@latest",
     "fluxcd@latest",
-    "bash@5.1",
+    "bash@5.1"
   ],
   "shell": {
     "init_hook": [
