@@ -16,8 +16,12 @@ fi
 
 kubeadm reset -f
 
-rm -rf $HOME:/etc/cni/net.d/10-calico.conflist
-rm -rf $HOME:/etc/cni/net.d/calico-kubeconfig
+sudo rm -f /etc/cni/net.d/10-calico.conflist
+sudo rm -f /etc/cni/net.d/calico-kubeconfig
+
+# Flush iptables rules left by Calico / kube-proxy
+sudo iptables -F && sudo iptables -t nat -F && sudo iptables -t mangle -F && sudo iptables -X
+sudo ip6tables -F && sudo ip6tables -t nat -F && sudo ip6tables -t mangle -F && sudo ip6tables -X
 
 sudo swapoff -a
 sudo sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
