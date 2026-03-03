@@ -12,8 +12,10 @@ export KUBECONFIG=/etc/kubernetes/admin.conf
 CALICO_VERSION=$(curl -s "https://api.github.com/repos/projectcalico/calico/releases/latest" | grep -Po '"tag_name": *"\K[^"]*')
 kubectl apply -f "https://raw.githubusercontent.com/projectcalico/calico/${CALICO_VERSION}/manifests/calico.yaml"
 
-# Wait for the Tigera operator to register its CRDs before applying the Installation CR
-kubectl wait --for=condition=Established crd/installations.operator.tigera.io --timeout=120s
+# Wait for the Tigera operator pod to be Ready (it registers CRDs on startup)
+kubectl -n tigera-operator rollout status deployment/tigera-operator --timeout=120s
+# CRD now exists; wait for the apiserver to mark it Established
+kubectl wait --for=condition=Established crd/installations.operator.tigera.io --timeout=60s
 
 # Calico custom-resources (operator Installation CR)
 KUBEADM_CONFIG="/root/kubernetes_sandbox_init/configs/kubeconfig-control-plane.yaml"
