@@ -47,3 +47,11 @@ sudo apt update
 sudo apt-mark unhold kubelet kubeadm kubectl
 sudo apt install -y kubelet kubeadm kubectl
 sudo apt-mark hold kubelet kubeadm kubectl
+
+# Install etcdctl matching the etcd version bundled with this Kubernetes release
+ETCD_VERSION=$(kubeadm config images list 2>/dev/null |
+  grep etcd | sed 's|.*etcd:||' | cut -d- -f1)
+curl -sL "https://github.com/etcd-io/etcd/releases/download/v${ETCD_VERSION}/etcd-v${ETCD_VERSION}-linux-amd64.tar.gz" |
+  tar xz -C /tmp
+sudo mv /tmp/etcd-v${ETCD_VERSION}-linux-amd64/etcdctl /usr/local/bin/
+rm -rf /tmp/etcd-v${ETCD_VERSION}-linux-amd64
